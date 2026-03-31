@@ -1,1 +1,164 @@
 # cs617
+
+<!-- Crime! -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boston Crime Data Analysis (by Elley :D)</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        p { line-height: 1.6; color: #555; }
+        .chart { width: 100%; height: 500px; }
+        
+        figure { margin: 0 0 60px 0; padding: 0; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        
+        figurecaption { 
+            display: block;
+            padding: 15px 20px; 
+            color: #555; 
+            margin-top: -5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Boston Crime Statistics Story: Shooting Incidents</h1>
+        <p>By Elley :D</p>
+        
+        <p>This is is visualization of shooting incident data collected in Boston within different divisions of time: hours, days, weeks, months, and years.<br><br>
+           The first chart covers how the amount of incidents within an hour may or may not change throughout a day.<br><br>
+           The second chart covers how the amount of incidents within a day of the week may or may not change depending on what day of the week it is.<br><br>
+           The third chart covers how the amount of incidents within a month may or may not change depending on what month it is.<br><br>
+           The fourth chart shows the amounts of incidents per year from 2023 to (the beginning of) 2026.
+        </p> 
+
+        <hr>
+
+        <figure>
+            <div id="hourChart" class="chart"></div>
+            <figurecaption style="font-weight: normal;">
+                <b>Based on this graph, it seems as though more incidents occur during night time, from hours 0 to 4 and from hours 19 to 23.</b>
+            </p>
+        </figure>
+
+        <hr>
+
+        <figure>
+            <div id="dayChart" class="chart"></div>
+            <figurecaption style="font-weight: normal;">
+                <b>Based on this graph, it seems as though more incidents occur in the weekend: Saturday and Sunday.</b>
+            </p>
+        </figure>
+
+        <hr>
+
+        <figure>
+            <div id="monthChart" class="chart"></div>
+            <figurecaption style="font-weight: normal;">
+                <b>Based on this graph, it seems as though more incidents occur during in the summer months: June, July, and August. Though January, May, and September aren't too far behind.</b>
+            </p>
+        </figure>
+  
+        <hr>
+
+        <figure>
+            <div id="yearChart" class="chart"></div>
+            <figurecaption style="font-weight: normal;">
+                <b>Based on this graph, the most amount of incidents occurred in 2023 and the least amount of incidents occurred in 2026. HOWEVER, the 2026 dataset is incomplete, as 2026 is not over!</b>
+            </p>
+        </figure>
+
+        <hr>
+    </div>
+
+<script>
+    const hourData = {
+        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 
+                 '11', '12', '13', '14', '15', '16', '17', '18', '19', 
+                 '20', '21','22', '23'],
+        values: [186, 142, 110, 85, 57, 45, 32, 25, 12, 24, 21, 32, 31,
+                 18, 32, 44, 44, 66, 66, 87, 123, 147, 150, 156]
+    };
+
+    const dayData = {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                 'Saturday', 'Sunday'],
+        values: [227, 237, 193, 197, 245, 331, 305]
+    }
+
+    const monthData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
+                 'August', 'September', 'October', 'November', 'December'],
+        values: [149, 117, 119, 120, 146, 167, 202, 170, 151, 131, 137, 126]
+    }
+
+    const yearData = {
+        labels: ['2023', '2024', '2025', '2026'],
+        values: [636, 485, 535, 81]
+    }
+
+    const trace1 = {
+        x: hourData.labels,
+        y: hourData.values,
+        type: 'bar',
+    }
+
+    const layout1 = {
+        title:'<b>Shooting Incidents by Hour of Day</b>',
+        xaxis: { title: 'Hour'},
+        yaxis: { title: 'Number of Shootings'}
+    }
+
+    Plotly.newPlot('hourChart', [trace1], layout1);
+
+    const trace2 = {
+        x: dayData.labels,
+        y: dayData.values,
+        type: 'bar',
+    }
+
+    const layout2 = {
+        title:'<b>Shooting Incidents by Day of the Week</b>',
+        xaxis: { title: 'Day of the Week'},
+        yaxis: { title: 'Number of Shootings'}
+    }
+
+    Plotly.newPlot('dayChart', [trace2], layout2);
+
+    const trace3 = {
+        x: monthData.labels,
+        y: monthData.values,
+        type: 'bar',
+    }
+
+    const layout3 = {
+        title:'<b>Shooting Incidents by Month</b>',
+        xaxis: { title: 'Month'},
+        yaxis: { title: 'Number of Shootings'}
+    }
+
+    Plotly.newPlot('monthChart', [trace3], layout3);
+
+    const trace4 = {
+        x: yearData.labels,
+        y: yearData.values,
+        type: 'bar',
+    }
+
+    const layout4 = {
+        title:'<b>Shooting Incidents by Year</b>',
+        xaxis: { title: 'Year'},
+        yaxis: { title: 'Number of Shootings'}
+    }
+
+    Plotly.newPlot('yearChart', [trace4], layout4);
+</script>
+</body>
+</html>
