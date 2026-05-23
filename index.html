@@ -170,60 +170,69 @@
 
 <script type="text/javascript">
     var map6 = L.map('map6').setView([37.8, -96], 4);
+    
+    var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map6);
 
-var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map6);
-
-var fossilDensities = {
-    "Utah": 4, "California": 3, "Colorado": 3, "New Jersey": 3, "Wyoming": 3,
-    "Arizona": 2, "Maryland": 2, "Massachusetts": 2, "Nebraska": 2, "New York": 2,
-    "South Dakota": 2, "Texas": 2, "Connecticut": 1, "Florida": 1, "Idaho": 1,
-    "Indiana": 1, "Iowa": 1, "Kentucky": 1, "Mississippi": 1, "Missouri": 1,
-    "Montana": 1, "Nevada": 1, "New Mexico": 1, "Ohio": 1, "Oregon": 1,
-    "Tennessee": 1, "Washington": 1, "Wisconsin": 1
-};
-
-function getCountyColor(density) {
-    return density >= 4 ? '#555555' :
-           density >= 3 ? '#777777' :
-           density >= 2 ? '#999999' :
-           density >= 1 ? '#aaaaaa' : 
-                          'rgba(0,0,0,0)';
-}
-
-function styleCounty(feature) {
-    var stateName = feature.properties.name;
-    var density = fossilDensities[stateName] || 0; 
-
-    return {
-        fillColor: getCountyColor(density),
-        weight: 1.5,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: density > 0 ? 0.7 : 0
+    var fossilDensities = {
+        "Utah": 4, "California": 3, "Colorado": 3, "New Jersey": 3, "Wyoming": 3,
+        "Arizona": 2, "Maryland": 2, "Massachusetts": 2, "Nebraska": 2, "New York": 2,
+        "South Dakota": 2, "Texas": 2, "Connecticut": 1, "Florida": 1, "Idaho": 1,
+        "Indiana": 1, "Iowa": 1, "Kentucky": 1, "Mississippi": 1, "Missouri": 1,
+        "Montana": 1, "Nevada": 1, "New Mexico": 1, "Ohio": 1, "Oregon": 1,
+        "Tennessee": 1, "Washington": 1, "Wisconsin": 1
     };
-}
 
-fetch('https://raw.githubusercontent.com/PublicLab/leaflet-environmental-enforcement/master/data/us-states.json')
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(geojsonData) {
-        L.geoJson(geojsonData, {
-            style: styleCounty,
-            onEachFeature: function(feature, layer) {
-                var stateName = feature.properties.name;
-                var density = fossilDensities[stateName] || 0;
-                layer.bindPopup("<strong>" + stateName + "</strong><br/>Fossil Sites Rating: " + density);
-            }
-        }).addTo(map6);
-    })
-    .catch(function(error) {
-        console.error("Error loading the map shapes: ", error);
-    });
+    function getCountyColor(density) {
+        return density >= 4 ? '#555555' :
+               density >= 3 ? '#777777' :
+               density >= 2 ? '#999999' :
+               density >= 1 ? '#aaaaaa' : 
+                              'rgba(0,0,0,0)'; 
+    }
+
+    function styleCounty(feature) {
+        var stateName = feature.properties.name;
+        var density = fossilDensities[stateName] || 0; 
+    
+        return {
+            fillColor: getCountyColor(density),
+            weight: 1.5,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: density > 0 ? 0.7 : 0.1 
+        };
+    }
+
+    var standardUSStatesGeoJSON = {
+        "type": "FeatureCollection",
+        "features": [
+            {"type":"Feature","properties":{"name":"Utah"},"geometry":{"type":"Polygon","coordinates":[[[-114.052962,42.001657],[-111.047063,42.001657],[-111.047063,41.000711],[-109.051119,41.002662],[-109.051119,37.000574],[-114.052962,37.000574],[-114.052962,42.001657]]]}},
+            {"type":"Feature","properties":{"name":"California"},"geometry":{"type":"Polygon","coordinates":[[[-124.409591,42.001657],[-120.001244,42.001657],[-120.001244,39.000263],[-114.131211,34.316154],[-114.471901,32.72361],[-117.202301,32.534156],[-124.409591,42.001657]]]}},
+            {"type":"Feature","properties":{"name":"Colorado"},"geometry":{"type":"Polygon","coordinates":[[[-109.049819,41.000711],[-102.051744,41.002362],[-102.051744,37.000374],[-109.049819,37.000374],[-109.049819,41.000711]]]}},
+            {"type":"Feature","properties":{"name":"New Jersey"},"geometry":{"type":"Polygon","coordinates":[[[-75.559104,39.629162],[-75.500201,39.810501],[-74.150301,41.350612],[-73.902104,40.991201],[-74.051104,40.051601],[-74.901104,38.931201],[-75.559104,39.629162]]]}},
+            {"type":"Feature","properties":{"name":"Wyoming"},"geometry":{"type":"Polygon","coordinates":[[[-111.047063,45.000212],[-104.052244,45.000212],[-104.052244,41.002362],[-111.047063,41.002362],[-111.047063,45.000212]]]}},
+            {"type":"Feature","properties":{"name":"Arizona"},"geometry":{"type":"Polygon","coordinates":[[[-114.816212,32.50162],[-114.816212,37.000574],[-109.045212,37.000574],[-109.045212,31.332301],[-111.050212,31.332301],[-114.816212,32.50162]]]}},
+            {"type":"Feature","properties":{"name":"Maryland"},"geometry":{"type":"Polygon","coordinates":[[[-79.480112,39.720104],[-75.050112,39.720104],[-75.100112,38.000104],[-76.300112,37.900104],[-77.900112,39.400104],[-79.480112,39.720104]]]}},
+            {"type":"Feature","properties":{"name":"Massachusetts"},"geometry":{"type":"Polygon","coordinates":[[[-73.508142,42.744821],[-72.78914,42.74121],[-71.50231,42.73812],[-69.92131,42.88121],[-70.02131,41.23121],[-70.61211,41.45121],[-71.12131,41.60121],[-71.85011,42.00121],[-73.50121,42.05111],[-73.508142,42.744821]]]}},
+            {"type":"Feature","properties":{"name":"New York"},"geometry":{"type":"Polygon","coordinates":[[[-79.76211,42.26121],[-79.76211,42.00121],[-74.00121,40.70121],[-71.85121,41.00121],[-73.34121,45.01121],[-79.76211,42.26121]]]}},
+            {"type":"Feature","properties":{"name":"Texas"},"geometry":{"type":"Polygon","coordinates":[[[-106.65011,31.99121],[-103.00121,32.00121],[-103.00121,36.50121],[-100.00121,36.50121],[-100.00121,34.00121],[-94.04121,33.55121],[-93.84121,29.71121],[-97.15121,25.95121],[-106.65011,31.99121]]]}},
+            {"type":"Feature","properties":{"name":"Connecticut"},"geometry":{"type":"Polygon","coordinates":[[[-73.72121,42.05111],[-71.78121,42.01121],[-71.80121,41.28121],[-73.60121,40.98121],[-73.72121,42.05111]]]}}
+        ]
+    };
+    
+    L.geoJson(standardUSStatesGeoJSON, {
+        style: styleCounty,
+        onEachFeature: function(feature, layer) {
+            var stateName = feature.properties.name;
+            var density = fossilDensities[stateName] || 0;
+            
+            layer.bindPopup("<strong>" + stateName + "</strong><br/>Fossil Sites Rating: " + (density > 0 ? density : "No recorded data"));
+        }
+    }).addTo(map6);
 </script>
 
 </body>
